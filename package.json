@@ -1,0 +1,57 @@
+{
+  "name": "@univers/data-evidence-contract",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Pure bounded Data receipts and generated-signal evidence wire values",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "node": "./dist/index.js",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "pnpm run clean && tsc",
+    "check": "pnpm run typecheck && pnpm run test && pnpm run build && pnpm run test:package",
+    "test": "vitest run",
+    "prepack": "pnpm run check",
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "test:package": "node --test tests/public-api.test.mjs",
+    "package": "pnpm pack --pack-destination .artifacts",
+    "publish:private": "npm publish --access restricted",
+    "ci": "pnpm run package"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "vitest": "3.2.4"
+  },
+  "license": "MIT",
+  "packageManager": "pnpm@8.15.6",
+  "pnpm": {
+    "overrides": {
+      "@types/node": "~20.19.25",
+      "vitest>vite": "5.4.21",
+      "vite-node>vite": "5.4.21"
+    }
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hsudatalks/univers-aip-contracts-ts-data-evidence.git"
+  },
+  "publishConfig": {
+    "registry": "https://david-server.mink-ph.ts.net/npm/",
+    "access": "restricted"
+  }
+}
