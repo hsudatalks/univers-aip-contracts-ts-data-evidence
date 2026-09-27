@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   normalizeBoundedDataMaterializationReceipts,
+  summarizeGeneratedSignalDeclaredFormat,
   summarizeGeneratedSignalStandardEvidence,
 } from '../src/index.js';
 
@@ -15,10 +16,10 @@ function standardEvidence(provenance = 'forecast'): Record<string, unknown> {
   };
 }
 
-describe('summarizeGeneratedSignalStandardEvidence', () => {
-  it('classifies generated signal evidence contract status', () => {
+describe('summarizeGeneratedSignalDeclaredFormat', () => {
+  it('reports declared format match without granting provenance authority', () => {
     expect(
-      summarizeGeneratedSignalStandardEvidence(
+      summarizeGeneratedSignalDeclaredFormat(
         standardEvidence(),
         'univers-forecast',
         'forecast',
@@ -27,8 +28,18 @@ describe('summarizeGeneratedSignalStandardEvidence', () => {
       sourceSystem: 'univers-forecast',
       contentType: 'generated_signal_execution_report',
       provenance: 'forecast',
-      status: 'standard',
+      status: 'declared_format_match',
     });
+    expect(
+      summarizeGeneratedSignalStandardEvidence(
+        { ...standardEvidence(), content: { unsupportedClaim: true } },
+        'univers-forecast',
+        'forecast',
+      ).status,
+    ).toBe('declared_format_match');
+    expect(
+      summarizeGeneratedSignalStandardEvidence(standardEvidence(), 'univers-forecast', 'forecast').status,
+    ).not.toBe('standard');
 
     expect(
       summarizeGeneratedSignalStandardEvidence(null, 'univers-forecast', 'forecast').status,

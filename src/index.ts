@@ -1,15 +1,20 @@
-export type GeneratedSignalStandardEvidenceStatus =
-  | 'standard'
+export type GeneratedSignalDeclaredFormatStatus =
+  | 'declared_format_match'
   | 'missing'
   | 'incomplete'
   | 'mismatched';
 
-export interface GeneratedSignalStandardEvidenceSummary {
+export interface GeneratedSignalDeclaredFormatSummary {
   sourceSystem: string;
   contentType: string;
   provenance: string;
-  status: GeneratedSignalStandardEvidenceStatus;
+  status: GeneratedSignalDeclaredFormatStatus;
 }
+
+/** @deprecated Use GeneratedSignalDeclaredFormatStatus; this is a wire-format diagnostic. */
+export type GeneratedSignalStandardEvidenceStatus = GeneratedSignalDeclaredFormatStatus;
+/** @deprecated Use GeneratedSignalDeclaredFormatSummary; no authority is verified here. */
+export type GeneratedSignalStandardEvidenceSummary = GeneratedSignalDeclaredFormatSummary;
 
 export interface BoundedDataMaterializationReceipt {
   schema: string;
@@ -63,11 +68,12 @@ export function normalizeBoundedDataMaterializationReceipts(
   return Array.from(receipts.values());
 }
 
-export function summarizeGeneratedSignalStandardEvidence(
+/** Compare declared metadata only. This does not validate content or World acceptance. */
+export function summarizeGeneratedSignalDeclaredFormat(
   standardEvidence: unknown,
   expectedSourceSystem: string,
   expectedProvenance: string,
-): GeneratedSignalStandardEvidenceSummary {
+): GeneratedSignalDeclaredFormatSummary {
   if (standardEvidence == null) {
     return missingSummary();
   }
@@ -100,7 +106,7 @@ export function summarizeGeneratedSignalStandardEvidence(
     };
   }
 
-  const standard =
+  const declaredFormatMatch =
     kind === 'other:generated_signal_execution_report' &&
     sourceSystem === expectedSourceSystem.trim() &&
     contentType === 'generated_signal_execution_report' &&
@@ -110,11 +116,14 @@ export function summarizeGeneratedSignalStandardEvidence(
     sourceSystem,
     contentType,
     provenance,
-    status: standard ? 'standard' : 'mismatched',
+    status: declaredFormatMatch ? 'declared_format_match' : 'mismatched',
   };
 }
 
-function missingSummary(): GeneratedSignalStandardEvidenceSummary {
+/** @deprecated Use summarizeGeneratedSignalDeclaredFormat. Its result is never proof of provenance. */
+export const summarizeGeneratedSignalStandardEvidence = summarizeGeneratedSignalDeclaredFormat;
+
+function missingSummary(): GeneratedSignalDeclaredFormatSummary {
   return {
     sourceSystem: 'missing',
     contentType: 'missing',
