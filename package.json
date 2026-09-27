@@ -1,6 +1,6 @@
 {
   "name": "@univers/data-evidence-contract",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "Pure bounded Data receipts and generated-signal evidence wire values",
   "main": "./dist/index.js",
@@ -11,6 +11,11 @@
       "node": "./dist/index.js",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./timeseries": {
+      "types": "./dist/timeseries.d.ts",
+      "import": "./dist/timeseries.js",
+      "default": "./dist/timeseries.js"
     }
   },
   "files": [

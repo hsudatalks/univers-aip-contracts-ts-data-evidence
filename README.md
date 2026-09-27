@@ -27,3 +27,14 @@ link.
 Install `@univers/data-evidence-contract@0.1.0` from the private Univers npm
 Registry. Run `pnpm run check` / `pnpm run package`; publish an unchanged clean
 committed candidate with `pnpm run publish:private` using external credentials.
+
+Version 0.1.1 adds `@univers/data-evidence-contract/timeseries`: public read
+receipt DTOs, `requireSignalReadBoundedWindow`,
+`requireSignalTimeseriesReadReceipt`, `decodeSignalTimeSeriesResponse` and
+`signalTimeseriesReadEvidence`. The decoder accepts direct or data-wrapped
+responses, preserves backend fields/warnings and checks the exact supplied
+World/resource/window binding, continuation/recovery, retention and SHA-256
+digest shape. An expected World revision is checked when explicitly supplied.
+It does not recompute the sample digest, choose a World, perform HTTP/auth,
+generate CLI suggestions or grant positive decision authority. Consumers retain
+point ordering/window/count limits, endpoint selection and presentation policy.
